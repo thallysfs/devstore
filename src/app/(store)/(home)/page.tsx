@@ -26,7 +26,7 @@ export default function Home() {
 
       <Link
         href="/"
-        className="group col-span-3 row-span-3 rounded-b-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
+        className="group relative col-span-3 row-span-3 rounded-b-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
       >
         <Image
           src="/moletom-java.png"
@@ -36,11 +36,16 @@ export default function Home() {
           quality={100}
           alt="moletom branco"
         />
+
+        <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w[280] rounded-full border-2 border-xinc-500 bg-black/60 p-1 pl-5">
+          <span className="text-sm truncate">Moletom nerver stop learning</span>
+          <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">R$ 129</span>
+        </div>
       </Link>
 
       <Link
         href="/"
-        className="group col-span-3 row-span-3 rounded-b-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
+        className="group relative col-span-3 row-span-3 rounded-b-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
       >
         <Image
           src="/camiseta-dowhile-2022.png"
@@ -50,6 +55,11 @@ export default function Home() {
           quality={100}
           alt="moletom branco"
         />
+
+        <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w[280] rounded-full border-2 border-xinc-500 bg-black/60 p-1 pl-5">
+          <span className="text-sm truncate">Moletom nerver stop learning</span>
+          <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">R$ 129</span>
+        </div>
       </Link>
     </div>
   );
