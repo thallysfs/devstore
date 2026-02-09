@@ -1,16 +1,33 @@
+import { api } from "@/data/api";
+import { Product } from "@/data/types/product";
+import { currencyBr } from "@/data/utils";
 import Image from "next/image";
 import Link from "next/link";
 
+async function getFeatured(): Promise<Product[]> {
+  const response = await api('/products/featured', {
+    // next: {
+    //   revalidate: 60 * 60 // 1 hour - 3600
+    // }
+  })
 
-export default function Home() {
+  const products = await response.json()
+
+  return products
+}
+
+
+export default async function Home() {
+  const [highlightedProdut, ...otherProducts] = await getFeatured() //desestruturação com o primeiro produto, depois array com os demais
+
   return (
     <div className="grid max-h-[860] grid-cols-9 grid-rows-6 gap-6">
       <Link
-        href="/"
+        href={`/product/${highlightedProdut.slug}`}
         className="group relative col-span-6 row-span-6 rounded-b-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
       >
         <Image
-          src="/moletom-never-stop-learning.png"
+          src={highlightedProdut.image}
           className="group-hover:scale-105 transition-transform duration-500"
           width={920}
           height={920}
@@ -19,48 +36,36 @@ export default function Home() {
         />
 
         <div className="absolute bottom-28 right-28 h-12 flex items-center gap-2 max-w[280] rounded-full border-2 border-xinc-500 bg-black/60 p-1 pl-5">
-          <span className="text-sm truncate">Moletom nerver stop learning</span>
-          <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">R$ 129</span>
+          <span className="text-sm truncate">{highlightedProdut.title}</span>
+          <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">
+            {currencyBr(highlightedProdut.price)}
+          </span>
         </div>
       </Link>
 
-      <Link
-        href="/"
-        className="group relative col-span-3 row-span-3 rounded-b-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
-      >
-        <Image
-          src="/moletom-java.png"
-          className="group-hover:scale-105 transition-transform duration-500"
-          width={920}
-          height={920}
-          quality={100}
-          alt="moletom branco"
-        />
+      {
+        otherProducts.map((product) => (
+          <Link
+            href={`/product/${product.slug}`}
+            className="group relative col-span-3 row-span-3 rounded-b-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
+            key={product.id}
+          >
+            <Image
+              src={product.image}
+              className="group-hover:scale-105 transition-transform duration-500"
+              width={920}
+              height={920}
+              quality={100}
+              alt="moletom branco"
+            />
 
-        <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w[280] rounded-full border-2 border-xinc-500 bg-black/60 p-1 pl-5">
-          <span className="text-sm truncate">Moletom nerver stop learning</span>
-          <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">R$ 129</span>
-        </div>
-      </Link>
-
-      <Link
-        href="/"
-        className="group relative col-span-3 row-span-3 rounded-b-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
-      >
-        <Image
-          src="/camiseta-dowhile-2022.png"
-          className="group-hover:scale-105 transition-transform duration-500"
-          width={920}
-          height={920}
-          quality={100}
-          alt="moletom branco"
-        />
-
-        <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w[280] rounded-full border-2 border-xinc-500 bg-black/60 p-1 pl-5">
-          <span className="text-sm truncate">Moletom nerver stop learning</span>
-          <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">R$ 129</span>
-        </div>
-      </Link>
+            <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w[280] rounded-full border-2 border-xinc-500 bg-black/60 p-1 pl-5">
+              <span className="text-sm truncate">{product.title}</span>
+              <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">{currencyBr(product.price)}</span>
+            </div>
+          </Link>
+        ))
+      }
     </div>
   );
 }
