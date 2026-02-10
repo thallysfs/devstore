@@ -7,10 +7,10 @@ export async function GET(
 ) {
   await new Promise((resolve) => setTimeout(resolve, 3000)) // demora de 3s para ver loading
 
-  const slug = z.string().parse(params.slug)
-  console.log("🚀 ~ GET ~ params.slug:", params.slug)
+  const { slug } = await params
 
-  const product = data.products.find((product) => product.slug === slug)
+  const parsedSlug = z.string().parse(slug)
+  const product = data.products.find((product) => product.slug === parsedSlug)
 
   if(!product) {
     return Response.json({ message: 'Product not found'}, { status: 400})

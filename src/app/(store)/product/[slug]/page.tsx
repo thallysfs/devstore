@@ -4,15 +4,13 @@ import { currencyBr } from "@/data/utils";
 import Image from "next/image";
 
 interface ProductProps {
-  params: {
-    slug: string
-  }
+  params: Promise<{ slug: string }>
 }
 
 async function getProduct(slug: string): Promise<Product> {
   const response = await api(`/products/${slug}`, {
     next: {
-      revalidate: 60 * 60 // 1 hour - 3600
+      revalidate: 1000
     }
   })
 
@@ -22,7 +20,8 @@ async function getProduct(slug: string): Promise<Product> {
 }
 
 export default async function ProductPage({ params }: ProductProps) {
-  const product = await getProduct(params.slug)
+  const { slug } = await params
+  const product = await getProduct(slug)
 
   return (
     <div className="relative grid max-h-[860] grid-cols-3">
@@ -50,9 +49,10 @@ export default async function ProductPage({ params }: ProductProps) {
             {currencyBr(product.price)}
           </span>
           <span className="text-sm text-zinc-400">
+            Em até 12x s/ juros de{' '}
             {(product.price / 12).toLocaleString('pt-BR', {
               style: 'currency',
-              currency: 'BRL'
+              currency: 'BRL',
             })}
           </span>
         </div>
