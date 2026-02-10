@@ -1,12 +1,35 @@
+import { api } from "@/data/api";
+import { Product } from "@/data/types/product";
+import { currencyBr } from "@/data/utils";
 import Image from "next/image";
 
-export default function ProductPage() {
+interface ProductProps {
+  params: {
+    slug: string
+  }
+}
+
+async function getProduct(slug: string): Promise<Product> {
+  const response = await api(`/products/${slug}`, {
+    next: {
+      revalidate: 60 * 60 // 1 hour - 3600
+    }
+  })
+
+  const products = await response.json()
+
+  return products
+}
+
+export default async function ProductPage({ params }: ProductProps) {
+  const product = await getProduct(params.slug)
+
   return (
     <div className="relative grid max-h-[860] grid-cols-3">
       <div className="col-span-2 overflow-hidden">
         <Image
-          src="/moletom-never-stop-learning.png"
-          alt="camisa nsp"
+          src={product.image}
+          alt=""
           width={1000}
           height={1000}
           quality={100}
@@ -15,19 +38,22 @@ export default function ProductPage() {
 
       <div className="flex flex-col justify-center px-12">
         <h1 className="text-3xl font-bold leading-tight">
-          Moletom Never stop Learning
+          {product.title}
         </h1>
 
         <p className="mt-2 leading-relaxed text-zinc-400">
-          Descrição do moletom, muito bom!!!!
+          {product.description}
         </p>
 
         <div className="mt-9 flex items-center gap-3">
           <span className="inline-block rounded-full bg-violet-500 px-5 py-2.5 font-semibold">
-            R$129
+            {currencyBr(product.price)}
           </span>
           <span className="text-sm text-zinc-400">
-            Em 12x sem juros de R$10,75
+            {(product.price / 12).toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL'
+            })}
           </span>
         </div>
 
