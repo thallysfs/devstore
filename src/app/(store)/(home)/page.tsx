@@ -1,6 +1,7 @@
 import { api } from "@/data/api";
 import { Product } from "@/data/types/product";
 import { currencyBr } from "@/data/utils";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,6 +15,10 @@ async function getFeatured(): Promise<Product[]> {
   const products = await response.json()
 
   return products
+}
+
+export const metadata: Metadata = {
+  title: 'Home'
 }
 
 
