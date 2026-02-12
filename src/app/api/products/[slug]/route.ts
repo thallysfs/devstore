@@ -5,7 +5,6 @@ export async function GET(
  _: Request,
  { params }: { params: { slug: string} }, 
 ) {
-  await new Promise((resolve) => setTimeout(resolve, 3000)) // demora de 3s para ver loading
 
   const { slug } = await params
 

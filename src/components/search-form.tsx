@@ -13,7 +13,6 @@ export function SearchForm() {
 
   function handleSearch(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
-    console.log("🚀 ~ handleSearch ~ event:", event.currentTarget)
 
     const formData = new FormData(event.currentTarget)
     const data = Object.fromEntries(formData)
@@ -38,9 +37,9 @@ export function SearchForm() {
       <input
         name="q"
         defaultValue={query || ''}
-        type="text"
         placeholder="Buscar produto"
         className="flex-1 bg-transparent text-sm outline-none placeholder:text-zinc-500"
+        required
       />
     </form>
   )
